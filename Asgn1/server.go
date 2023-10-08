@@ -49,9 +49,7 @@ func testHandler(w http.ResponseWriter, rew *http.Request) {
 
 	case "POST":
 		if err := rew.ParseForm(); err != nil {
-			fmt.Fprintf(w, "ParseForm() err: %v", err)
 			http.Error(w, "Internal Server Error", 500)
-
 			return
 		}
 		if len(rew.Form["msg"]) == 1 {
@@ -69,12 +67,10 @@ func testHandler(w http.ResponseWriter, rew *http.Request) {
 }
 
 func main() {
-	// Hello world, the web server
-
 	http.HandleFunc("/hello", helloHandler)
 	http.HandleFunc("/hello/", helloHandler)
 
 	http.HandleFunc("/test", testHandler)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8090", nil))
 }
