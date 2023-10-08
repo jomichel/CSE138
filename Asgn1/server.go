@@ -12,29 +12,31 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 
 	case "GET":
-		// get url path
 
 		var res string
 
-		w.Header().Set("Content-Type", "application/json")
 		s := strings.Split(req.URL.Path[1:], "/")
 		if len(s) == 1 {
+			w.Header().Set("Content-Type", "application/json")
+
 			res = `{"message": "world"}`
 		} else {
-			http.Error(w, "Method Not Allowed", 405)
-
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			io.WriteString(w, "Method Not Allowed")
 		}
 
 		io.WriteString(w, res)
 	case "POST":
 		var res string
 
-		w.Header().Set("Content-Type", "application/json")
 		s := strings.Split(req.URL.Path[1:], "/")
 		if len(s) == 2 {
-			res = fmt.Sprintf(`{"message": "Hello, %s"}`, s[1])
+			w.Header().Set("Content-Type", "application/json")
+
+			res = fmt.Sprintf(`{"message": "Hi, %s."}`, s[1])
 		} else {
-			http.Error(w, "Method Not Allowed", 405)
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			io.WriteString(w, "Method Not Allowed")
 		}
 		io.WriteString(w, res)
 
@@ -56,7 +58,8 @@ func testHandler(w http.ResponseWriter, rew *http.Request) {
 			s := rew.Form.Get("msg")
 			res = fmt.Sprintf(`{"message": "%s"}`, s)
 		} else {
-			http.Error(w, "Bad Request", 400)
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, "Bad Request")
 			return
 
 		}
