@@ -20,9 +20,12 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 
 			res = `{"message": "world"}`
-		} else {
+		} else if len(s) == 2 {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			io.WriteString(w, "Method Not Allowed")
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+			io.WriteString(w, "Not Found")
 		}
 
 		io.WriteString(w, res)
@@ -34,9 +37,12 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 
 			res = fmt.Sprintf(`{"message": "Hi, %s."}`, s[1])
-		} else {
+		} else if len(s) == 1 {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			io.WriteString(w, "Method Not Allowed")
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+			io.WriteString(w, "Not Found")
 		}
 		io.WriteString(w, res)
 
